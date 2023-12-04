@@ -1,0 +1,60 @@
+public class TestClassDemo {
+
+    public static Integer test(integer a,integer b){
+        integer result=0;
+        if(a>10){
+            result =a+b;
+        }else{
+            result =a-b;
+        }
+        return result;
+    }
+    @testVisible
+    private static void getDetailsOne(string abc){
+        list<account> accountToUpdate =new list<account>();
+        for(account a:[select id,name,Active__c From account where name =:abc]){
+            if(a.Active__c.toLowercase() == 'yes'){
+                a.name = 'roshan';
+                accountToUpdate.add(a);
+            }    
+        }
+        update accountToUpdate;
+    }
+}
+
+
+@isTest
+public class TestClassDemo_Test {
+    //@testsetup will only call once
+    @testsetup
+    public static void setup(){
+        account a= new account();
+        a.name ='rahul';
+        a.Active__c ='No';
+        insert a;
+    }
+
+    @isTest
+    public static void testPositive(){
+        Test.startTest();
+        TestClassDemo.test(11,2);
+        Test.stopTest();
+    }
+    @isTest
+    public static void testNegative(){
+        Test.startTest();
+        TestClassDemo.test(4,2);
+        Test.stopTest();
+    }
+    @isTest
+    public static void getDetailsOne_test(){
+        account a = [select id,name,Active__c from account where Name = 'rahul'];
+        a.Name ='z';
+        a.Active__c = 'Yes';
+        update a;
+        Test.startTest();
+        TestClassDemo.getDetailsOne('z');
+        Test.stopTest();
+    }
+}
+
